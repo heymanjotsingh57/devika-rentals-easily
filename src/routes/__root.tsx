@@ -85,13 +85,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Devika Rentals offers hassle-free bike and scooter rentals across the city. Book online in minutes.",
       },
-      { property: "og:title", content: "Devika Rentals — Rent Bikes & Scooters" },
+      { property: "og:title", content: "Devika Rentals — Rent Bikes & Scooters Easily" },
       {
         property: "og:description",
         content: "Hassle-free bike and scooter rentals. Book online in minutes.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Devika Rentals — Rent Bikes & Scooters Easily" },
+      { name: "description", content: "Rent bikes and scooters quickly with Devika Rentals. Easy online booking, secure reservations, affordable daily rates, and a mobile-friendly experience." },
+      { property: "og:description", content: "Rent bikes and scooters quickly with Devika Rentals. Easy online booking, secure reservations, affordable daily rates, and a mobile-friendly experience." },
+      { name: "twitter:description", content: "Rent bikes and scooters quickly with Devika Rentals. Easy online booking, secure reservations, affordable daily rates, and a mobile-friendly experience." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7e165fce-f824-42ee-99f4-a250609664e9/id-preview-ca63a3e6--b5ec136e-4da3-4d65-9773-ce466941d53a.lovable.app-1782969542235.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7e165fce-f824-42ee-99f4-a250609664e9/id-preview-ca63a3e6--b5ec136e-4da3-4d65-9773-ce466941d53a.lovable.app-1782969542235.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
