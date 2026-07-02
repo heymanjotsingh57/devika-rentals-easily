@@ -82,6 +82,7 @@ function OwnerBookings() {
                 <th className="p-3 text-left">Customer</th>
                 <th className="p-3 text-left">Vehicle</th>
                 <th className="p-3 text-left">Dates</th>
+                <th className="p-3 text-left">Gov ID</th>
                 <th className="p-3 text-right">Deposit</th>
                 <th className="p-3 text-right">Total</th>
                 <th className="p-3 text-left">Status</th>
