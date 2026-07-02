@@ -26,7 +26,7 @@ export function BookingDialog({
   open: boolean;
   onOpenChange: (o: boolean) => void;
 }) {
-  const { addBooking, isVehicleBookedInRange, updateVehicle } = useStore();
+  const { addBooking, isVehicleBookedInRange } = useStore();
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
