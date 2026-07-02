@@ -10,14 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VehiclesRouteImport } from './routes/vehicles'
+import { Route as OwnerRouteImport } from './routes/owner'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OwnerIndexRouteImport } from './routes/owner.index'
+import { Route as OwnerVehiclesRouteImport } from './routes/owner.vehicles'
+import { Route as OwnerBookingsRouteImport } from './routes/owner.bookings'
 
 const VehiclesRoute = VehiclesRouteImport.update({
   id: '/vehicles',
   path: '/vehicles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -40,13 +49,32 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerIndexRoute = OwnerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerVehiclesRoute = OwnerVehiclesRouteImport.update({
+  id: '/vehicles',
+  path: '/vehicles',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerBookingsRoute = OwnerBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => OwnerRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
+  '/owner': typeof OwnerRouteWithChildren
   '/vehicles': typeof VehiclesRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/vehicles': typeof OwnerVehiclesRoute
+  '/owner/': typeof OwnerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +82,9 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/vehicles': typeof VehiclesRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/vehicles': typeof OwnerVehiclesRoute
+  '/owner': typeof OwnerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,14 +92,45 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
+  '/owner': typeof OwnerRouteWithChildren
   '/vehicles': typeof VehiclesRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/vehicles': typeof OwnerVehiclesRoute
+  '/owner/': typeof OwnerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/login' | '/vehicles'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/login'
+    | '/owner'
+    | '/vehicles'
+    | '/owner/bookings'
+    | '/owner/vehicles'
+    | '/owner/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/login' | '/vehicles'
-  id: '__root__' | '/' | '/about' | '/contact' | '/login' | '/vehicles'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/login'
+    | '/vehicles'
+    | '/owner/bookings'
+    | '/owner/vehicles'
+    | '/owner'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/login'
+    | '/owner'
+    | '/vehicles'
+    | '/owner/bookings'
+    | '/owner/vehicles'
+    | '/owner/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +138,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
+  OwnerRoute: typeof OwnerRouteWithChildren
   VehiclesRoute: typeof VehiclesRoute
 }
 
@@ -86,6 +149,13 @@ declare module '@tanstack/react-router' {
       path: '/vehicles'
       fullPath: '/vehicles'
       preLoaderRoute: typeof VehiclesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -116,14 +186,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/': {
+      id: '/owner/'
+      path: '/'
+      fullPath: '/owner/'
+      preLoaderRoute: typeof OwnerIndexRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/owner/vehicles': {
+      id: '/owner/vehicles'
+      path: '/vehicles'
+      fullPath: '/owner/vehicles'
+      preLoaderRoute: typeof OwnerVehiclesRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/owner/bookings': {
+      id: '/owner/bookings'
+      path: '/bookings'
+      fullPath: '/owner/bookings'
+      preLoaderRoute: typeof OwnerBookingsRouteImport
+      parentRoute: typeof OwnerRoute
+    }
   }
 }
+
+interface OwnerRouteChildren {
+  OwnerBookingsRoute: typeof OwnerBookingsRoute
+  OwnerVehiclesRoute: typeof OwnerVehiclesRoute
+  OwnerIndexRoute: typeof OwnerIndexRoute
+}
+
+const OwnerRouteChildren: OwnerRouteChildren = {
+  OwnerBookingsRoute: OwnerBookingsRoute,
+  OwnerVehiclesRoute: OwnerVehiclesRoute,
+  OwnerIndexRoute: OwnerIndexRoute,
+}
+
+const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
+  OwnerRoute: OwnerRouteWithChildren,
   VehiclesRoute: VehiclesRoute,
 }
 export const routeTree = rootRouteImport
