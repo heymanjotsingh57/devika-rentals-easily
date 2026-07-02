@@ -95,7 +95,7 @@ export function BookingDialog({
     if (!vehicle) return;
     if (!validate()) return;
     if (isVehicleBookedInRange(vehicle.id, start, end)) {
-      toast.error("This vehicle is already booked for the selected dates.");
+      toast.error("This scooter is already booked for the selected dates.");
       return;
     }
     const b = addBooking({
@@ -110,7 +110,6 @@ export function BookingDialog({
       totalDays,
       totalAmount,
     });
-    updateVehicle(vehicle.id, { available: false });
     toast.success("Booking confirmed!");
     setConfirmed({ id: b.id, name: b.customerName, start: b.startDate, end: b.endDate, total: b.totalAmount, deposit: b.deposit });
   };
