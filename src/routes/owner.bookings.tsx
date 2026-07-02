@@ -82,6 +82,7 @@ function OwnerBookings() {
                 <th className="p-3 text-left">Customer</th>
                 <th className="p-3 text-left">Vehicle</th>
                 <th className="p-3 text-left">Dates</th>
+                <th className="p-3 text-left">Gov ID</th>
                 <th className="p-3 text-right">Deposit</th>
                 <th className="p-3 text-right">Total</th>
                 <th className="p-3 text-left">Status</th>
@@ -101,6 +102,13 @@ function OwnerBookings() {
                     <td className="p-3">{v?.name ?? "—"}</td>
                     <td className="p-3 text-xs text-muted-foreground">
                       {b.startDate}<br />→ {b.endDate}
+                    </td>
+                    <td className="p-3">
+                      {b.govIdData?.startsWith("data:image") ? (
+                        <img src={b.govIdData} alt={b.govIdName} className="h-10 w-14 rounded border border-border object-cover" />
+                      ) : (
+                        <span className="text-xs text-muted-foreground">{b.govIdName || "—"}</span>
+                      )}
                     </td>
                     <td className="p-3 text-right">{formatCurrency(b.deposit)}</td>
                     <td className="p-3 text-right font-semibold text-primary">{formatCurrency(b.totalAmount)}</td>

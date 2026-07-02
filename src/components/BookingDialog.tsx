@@ -26,7 +26,7 @@ export function BookingDialog({
   open: boolean;
   onOpenChange: (o: boolean) => void;
 }) {
-  const { addBooking, isVehicleBookedInRange, updateVehicle } = useStore();
+  const { addBooking, isVehicleBookedInRange } = useStore();
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -39,6 +39,21 @@ export function BookingDialog({
 
   const totalDays = useMemo(() => daysBetween(start, end), [start, end]);
   const totalAmount = totalDays * (vehicle?.dailyPrice ?? 0);
+
+  const t = today();
+  const dateInvalid = start < t || end < start;
+  const overlap = useMemo(
+    () => !!vehicle && !dateInvalid && isVehicleBookedInRange(vehicle.id, start, end),
+    [vehicle, start, end, dateInvalid, isVehicleBookedInRange],
+  );
+  const formInvalid =
+    !name.trim() ||
+    !/^\d{10}$/.test(phone) ||
+    dateInvalid ||
+    !idFile ||
+    !deposit ||
+    Number(deposit) <= 0 ||
+    overlap;
 
   const reset = () => {
     setName(""); setPhone(""); setStart(today()); setEnd(today());
@@ -80,7 +95,7 @@ export function BookingDialog({
     if (!vehicle) return;
     if (!validate()) return;
     if (isVehicleBookedInRange(vehicle.id, start, end)) {
-      toast.error("This vehicle is already booked for the selected dates.");
+      toast.error("This scooter is already booked for the selected dates.");
       return;
     }
     const b = addBooking({
@@ -95,7 +110,6 @@ export function BookingDialog({
       totalDays,
       totalAmount,
     });
-    updateVehicle(vehicle.id, { available: false });
     toast.success("Booking confirmed!");
     setConfirmed({ id: b.id, name: b.customerName, start: b.startDate, end: b.endDate, total: b.totalAmount, deposit: b.deposit });
   };
@@ -190,10 +204,16 @@ export function BookingDialog({
                   <span className="font-bold text-primary">{formatCurrency(totalAmount)}</span>
                 </div>
               </div>
+
+              {overlap && (
+                <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm font-medium text-destructive">
+                  This scooter is already booked for the selected dates.
+                </p>
+              )}
             </div>
             <DialogFooter>
               <Button variant="ghost" onClick={() => handleClose(false)}>Cancel</Button>
-              <Button onClick={submit} disabled={!vehicle?.available}>Confirm Booking</Button>
+              <Button onClick={submit} disabled={formInvalid}>Confirm Booking</Button>
             </DialogFooter>
           </>
         )}
