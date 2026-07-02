@@ -204,10 +204,16 @@ export function BookingDialog({
                   <span className="font-bold text-primary">{formatCurrency(totalAmount)}</span>
                 </div>
               </div>
+
+              {overlap && (
+                <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm font-medium text-destructive">
+                  This scooter is already booked for the selected dates.
+                </p>
+              )}
             </div>
             <DialogFooter>
               <Button variant="ghost" onClick={() => handleClose(false)}>Cancel</Button>
-              <Button onClick={submit} disabled={!vehicle?.available}>Confirm Booking</Button>
+              <Button onClick={submit} disabled={formInvalid}>Confirm Booking</Button>
             </DialogFooter>
           </>
         )}
