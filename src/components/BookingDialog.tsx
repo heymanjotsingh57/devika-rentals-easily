@@ -40,6 +40,21 @@ export function BookingDialog({
   const totalDays = useMemo(() => daysBetween(start, end), [start, end]);
   const totalAmount = totalDays * (vehicle?.dailyPrice ?? 0);
 
+  const t = today();
+  const dateInvalid = start < t || end < start;
+  const overlap = useMemo(
+    () => !!vehicle && !dateInvalid && isVehicleBookedInRange(vehicle.id, start, end),
+    [vehicle, start, end, dateInvalid, isVehicleBookedInRange],
+  );
+  const formInvalid =
+    !name.trim() ||
+    !/^\d{10}$/.test(phone) ||
+    dateInvalid ||
+    !idFile ||
+    !deposit ||
+    Number(deposit) <= 0 ||
+    overlap;
+
   const reset = () => {
     setName(""); setPhone(""); setStart(today()); setEnd(today());
     setDeposit("500"); setIdFile(null); setErrors({}); setConfirmed(null);
